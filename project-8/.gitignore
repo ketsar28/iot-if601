@@ -1,6 +1,6 @@
-﻿*.sqlite3
-*.docx
+﻿*.docx
 *.pdf
+*.sqlite3
 __pycache__/
 venv/
 .env

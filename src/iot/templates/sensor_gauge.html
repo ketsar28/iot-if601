@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Semi-Circular Gauges</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 40px;
+    }
+    .gauge-box {
+      display: inline-block;
+      margin: 30px;
+    }
+    .label {
+      margin-top: 10px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .value {
+      margin-top: 5px;
+      font-size: 20px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h2>Sensor Gauges – Device {{ device_id }}</h2>
+
+  <!-- Temperature Gauge -->
+  <div class="gauge-box">
+    <svg width="200" height="100" viewBox="0 0 100 50">
+      <path d="M 5 50 A 45 45 0 0 1 95 50" stroke="#eee" stroke-width="10" fill="none"/>
+
+      <!-- 눈금 -->
+      {% for tick in temp_ticks %}
+        <line x1="50" y1="5" x2="50" y2="10"
+        transform="rotate({{ tick.angle|add:"-90" }} 50 50)"
+        stroke="#333" stroke-width="1"/>
+      {% endfor %}
+
+      <!-- 바늘 -->
+      <line id="needle-temp" x1="50" y1="50" x2="50" y2="15"
+            stroke="red" stroke-width="3" stroke-linecap="round"
+            transform="rotate(0 50 50)" />
+      <text x="50" y="48" text-anchor="middle" font-size="10">°C</text>
+    </svg>
+    <div class="label">Temperature</div>
+    <div class="value" id="needle-temp-value">-- °C</div>
+  </div>
+
+  <!-- Humidity Gauge -->
+  <div class="gauge-box">
+    <svg width="200" height="100" viewBox="0 0 100 50">
+      <path d="M 5 50 A 45 45 0 0 1 95 50" stroke="#eee" stroke-width="10" fill="none"/>
+
+      <!-- 눈금 -->
+      {% for tick in hum_ticks %}
+        <line x1="50" y1="5" x2="50" y2="10"
+        transform="rotate({{ tick.angle|add:"-90" }} 50 50)"
+        stroke="#333" stroke-width="1"/>
+      {% endfor %}
+
+      <!-- 바늘 -->
+      <line id="needle-hum" x1="50" y1="50" x2="50" y2="15"
+            stroke="blue" stroke-width="3" stroke-linecap="round"
+            transform="rotate(0 50 50)" />
+      <text x="50" y="48" text-anchor="middle" font-size="10">%</text>
+    </svg>
+    <div class="label">Humidity</div>
+    <div class="value" id="needle-hum-value">-- %</div>
+  </div>
+
+  <script>
+    const temp = {{ latest.temperature }};
+    const hum = {{ latest.humidity }};
+
+    document.getElementById("needle-temp-value").innerText = temp + " °C";
+    document.getElementById("needle-hum-value").innerText = hum + " %";
+
+    const rotateNeedle = (id, value, max) => {
+      const angle = (value / max) * 180 -90 ;
+      document.getElementById(id).setAttribute("transform", `rotate(${angle} 50 50)`);
+    };
+
+    rotateNeedle("needle-temp", temp, 50);
+    rotateNeedle("needle-hum", hum, 100);
+  </script>
+</body>
+</html>
