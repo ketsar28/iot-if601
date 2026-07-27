@@ -1,0 +1,6 @@
+﻿*.docx
+*.pdf
+*.sqlite3
+__pycache__/
+venv/
+.env
