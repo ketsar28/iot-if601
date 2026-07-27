@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sensor Data - {{ device_id }}</title>
+</head>
+<body>
+    <h2>Sensor Data for {{ device_id }}</h2>
+    <table border="1">
+        <tr>
+            <th>Timestamp</th>
+            <th>Temperature (°C)</th>
+            <th>Humidity (%)</th>
+        </tr>
+        {% for entry in data %}
+        <tr>
+            <td>{{ entry.timestamp }}</td>
+            <td>{{ entry.temperature }}</td>
+            <td>{{ entry.humidity }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
